@@ -28,6 +28,7 @@ import           GHC.Generics
 import           GHC.TypeLits
 import           OpenAPI.Internal.Types
 import           Prelude                hiding (maximum, minimum, not)
+import           Servant.API            (WithStatus)
 
 -- | Types for which we can produce a 'SchemaObject' that accurately describes the
 --   JSON serialization format.
@@ -61,6 +62,8 @@ instance ToOpenAPISchema a => ToOpenAPISchema (NonEmpty a) where
     (toSchema $ Proxy @[a])
        {minItems = Just 1}
 
+instance ToOpenAPISchema a => ToOpenAPISchema (WithStatus s a) where
+  toSchema Proxy = toSchema (Proxy @a)
 
 ------ Orphan instances ------
 
