@@ -228,7 +228,8 @@ instance
   ( HasOpenAPI api
   , KnownSymbol s
   ) => HasOpenAPI (Description s :> api) where
-    toEndpointInfo Proxy = set #description (Just description) <$> toEndpointInfo @api Proxy
+    toEndpointInfo Proxy =
+      mapOperations (set #description (Just description)) <$> toEndpointInfo @api Proxy
       where
         description = Text.pack . symbolVal $ Proxy @s
 
@@ -236,7 +237,8 @@ instance
   ( HasOpenAPI api
   , KnownSymbol s
   ) => HasOpenAPI (Summary s :> api) where
-    toEndpointInfo Proxy = set #summary (Just summary) <$> toEndpointInfo @api Proxy
+    toEndpointInfo Proxy =
+      mapOperations (set #summary (Just summary)) <$> toEndpointInfo @api Proxy
       where
         summary = Text.pack . symbolVal $ Proxy @s
 
